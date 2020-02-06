@@ -72,29 +72,13 @@ public class Interface {
 				}
 				break;
 			case "mbway-transfer":
-				String sourcePhone = str[1];
-				String targetPhone = str[2];
-				int amount = Integer.parseInt(str[3]);
-				MbwayAccount targetMb;
-				MbwayAccount sourceMb;
-				try {
-					sourceMb = MbWay.getAccount(sourcePhone);
-				} catch (MbWayException e) {
-					System.out.println("Could not complete transfer!");
+				if (checkParametersTransfer(str[1], str[2], Integer.parseInt(str[3]))) {
+					System.out.println("Transfer successful!");
+					break;
+				} else {
 					break;
 				}
-				try {
-					targetMb = MbWay.getAccount(targetPhone);
-				} catch (MbWayException e) {
-					System.out.println("Could not complete transfer!");
-					break;
-				}
-				if (targetMb.getState() == false || sourceMb.getState() == false) {
-					System.out.println("Could not complete transfer!");
-				}
-				sibs.transfer(sourceMb.getIban(), targetMb.getIban(), amount);
-				System.out.println("Transfer successful!");
-				break;
+
 			case "mbway-split-bill":
 				int nrFriends = Integer.parseInt(str[1]);
 				int amountToSplit = Integer.parseInt(str[2]);
@@ -120,13 +104,13 @@ public class Interface {
 							o = false;
 							break;
 						}
+
 						if (service.getAccountByIban((MbWay.getAccount(str1[1]).getIban())).getBalance() < Integer
 								.parseInt(str1[2])) {
 							System.out.println("Oh no! One of your friends does not have money to pay!");
 							o = false;
 							break;
 						}
-
 					} else if (comand.equals("end")) {
 						o = false;
 					} else {
@@ -134,15 +118,10 @@ public class Interface {
 					}
 
 				}
-				if (addedFriends != nrFriends) {
-					if (addedFriends < nrFriends) {
-						System.out.println("Oh no! One friend is missing.");
-						break;
-					} else if (addedFriends > nrFriends) {
-						System.out.println("Oh no! Too many friends.");
-						break;
-					}
+				if (!checkFriends(addedFriends, nrFriends)) {
+					break;
 				}
+
 				if (amountToSplit != friendsAmount) {
 					System.out.println("Something is wrong. Did you set the bill amount right?");
 					break;
@@ -159,6 +138,7 @@ public class Interface {
 		}
 	}
 
+	// criamos metodos para ter o codigo mais compartimentalizado
 	public static String[] lerInput() {
 		Scanner input = new Scanner(new BufferedInputStream(System.in));
 		String linha = input.nextLine();
@@ -175,6 +155,41 @@ public class Interface {
 			return null;
 		}
 
+	}
+
+	public static boolean checkParametersTransfer(String sourcePhone, String targetPhone, int amount) {
+		MbwayAccount targetMb;
+		MbwayAccount sourceMb;
+		try {
+			sourceMb = MbWay.getAccount(sourcePhone);
+		} catch (MbWayException e) {
+			System.out.println("Could not complete transfer!");
+			return false;
+		}
+		try {
+			targetMb = MbWay.getAccount(targetPhone);
+		} catch (MbWayException e) {
+			System.out.println("Could not complete transfer!");
+			return false;
+		}
+		if (targetMb.getState() == false || sourceMb.getState() == false) {
+			System.out.println("Could not complete transfer!");
+			return false;
+		}
+		return true;
+	}
+
+	public static boolean checkFriends(int addedFriends, int nrFriends) {
+		if (addedFriends != nrFriends) {
+			if (addedFriends < nrFriends) {
+				System.out.println("Oh no! One friend is missing.");
+				return false;
+			} else if (addedFriends > nrFriends) {
+				System.out.println("Oh no! Too many friends.");
+				return false;
+			}
+		}
+		return true;
 	}
 
 }
