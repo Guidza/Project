@@ -19,6 +19,12 @@ public class Client {
 	private final String address;
 	private int age;
 
+	// criamos este construtor para reduzir os argumentos do client.
+	public Client(Bank bank, IdCard id, String phoneNumber) throws ClientException {
+
+		this(bank, id.getFullName()[0], id.getFullName()[1], id.getNif(), phoneNumber, id.getAddress(), id.getAge());
+	}
+
 	public Client(Bank bank, String firstName, String lastName, String nif, String phoneNumber, String address, int age)
 			throws ClientException {
 		checkParameters(bank, nif, phoneNumber, age);

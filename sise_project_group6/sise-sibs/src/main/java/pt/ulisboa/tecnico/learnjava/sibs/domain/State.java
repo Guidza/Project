@@ -15,7 +15,6 @@ public class State {
 	}
 
 	public void process(TransferOperation transfer, Sibs sibs) throws AccountException {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -24,17 +23,15 @@ public class State {
 	}
 
 	public int getCount() {
-		// TODO Auto-generated method stub
+
 		return 0;
 	}
 
 	public void errorState(TransferOperation transfer, Sibs sibs) throws AccountException {
-		// TODO Auto-generated method stub
 
 	}
 
 	public void success(TransferOperation transfer, Sibs sibs) throws AccountException {
-		// TODO Auto-generated method stub
 
 	}
 }

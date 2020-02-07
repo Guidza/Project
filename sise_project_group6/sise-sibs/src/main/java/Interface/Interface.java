@@ -34,8 +34,6 @@ public class Interface {
 		bank1.createAccount(AccountType.CHECKING, client2, 10000, 1000); // Iban CGDCK2
 		bank2.createAccount(AccountType.CHECKING, client3, 10000, 1000); // Iban CTTCK3
 		MbwayAccount mbway;
-
-		// TODO Auto-generated method stub
 		while (true) {
 			String str[] = lerInput();
 			String comando = str[0];
@@ -59,17 +57,7 @@ public class Interface {
 				System.out.println("Code: " + code + " (Dont share it with anyone)");
 				break;
 			case "confirm-mbway":
-				String phone = str[1];
-				int cod = Integer.parseInt(str[2]);
-				MbwayAccount mb = MbWay.getAccount(phone);
-
-				if (mb.getCode().equals(cod)) {
-					mb.setState(true);
-					System.out.println("MBWay association confirmed successfully!");
-
-				} else {
-					System.out.println("Wrong Confirmation Code!");
-				}
+				confirmMbWay(str[1], Integer.parseInt(str[2]));
 				break;
 			case "mbway-transfer":
 				if (checkParametersTransfer(str[1], str[2], Integer.parseInt(str[3]))) {
@@ -126,19 +114,41 @@ public class Interface {
 					System.out.println("Something is wrong. Did you set the bill amount right?");
 					break;
 				}
-				String target = friends[0].getIban();
-				for (int j = 1; j < addedFriends; j++) {
-					String source = friends[j].getIban();
-					int share = amounts[j];
-					sibs.transfer(source, target, share);
-				}
+				transfers(friends, amounts, sibs);
 				break;
 			}
 
 		}
 	}
 
-	// criamos metodos para ter o codigo mais compartimentalizado
+	public static void transfers(MbwayAccount[] friends, int[] amounts, Sibs sibs)
+			throws SibsException, AccountException, OperationException, BankException {
+		String target = friends[0].getIban();
+		for (int j = 1; j < friends.length; j++) {
+			String source = friends[j].getIban();
+			int share = amounts[j];
+			sibs.transfer(source, target, share);
+		}
+	}
+
+	public static boolean confirmMbWay(String phone, int cod) throws MbWayException {
+		MbwayAccount mb = null;
+		try {
+			mb = MbWay.getAccount(phone);
+		} catch (MbWayException e) {
+			System.out.println("Wrong Confirmation Code!");
+		}
+
+		if (mb.getCode().equals(cod)) {
+			mb.setState(true);
+			System.out.println("MBWay association confirmed successfully!");
+			return true;
+		} else {
+			System.out.println("Wrong Confirmation Code!");
+			return false;
+		}
+	}
+
 	public static String[] lerInput() {
 		Scanner input = new Scanner(new BufferedInputStream(System.in));
 		String linha = input.nextLine();

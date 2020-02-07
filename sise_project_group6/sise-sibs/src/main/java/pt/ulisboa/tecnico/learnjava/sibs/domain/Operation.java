@@ -39,12 +39,11 @@ public abstract class Operation {
 	}
 
 	public void setState(State state) {
-		// TODO Auto-generated method stub
 
 	}
 
 	public State getState() {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
