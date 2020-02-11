@@ -12,6 +12,7 @@ import org.junit.Test;
 import pt.ulisboa.tecnico.learnjava.bank.domain.Bank;
 import pt.ulisboa.tecnico.learnjava.bank.domain.CheckingAccount;
 import pt.ulisboa.tecnico.learnjava.bank.domain.Client;
+import pt.ulisboa.tecnico.learnjava.bank.domain.IdCard;
 import pt.ulisboa.tecnico.learnjava.bank.domain.SalaryAccount;
 import pt.ulisboa.tecnico.learnjava.bank.domain.SavingsAccount;
 import pt.ulisboa.tecnico.learnjava.bank.domain.YoungAccount;
@@ -36,9 +37,10 @@ public class ExamTests {
 		this.services = new Services();
 		this.bank = new Bank("CGD");
 
-		this.client = new Client(this.bank, "José", "Manuel", "123456789", "987654321", "Street", 33);
-		Client otherClient = new Client(this.bank, "José", "Manuel", "023456789", "987654321", "Street", 33);
-		this.youngClient = new Client(this.bank, "José", "Manuel", "123456780", "987654321", "Street", 17);
+		this.client = new Client(this.bank, new IdCard("José Manuel", "123456789", "Street", 33), "987654321");
+		new Client(this.bank, new IdCard("José Manuel", "023456789", "Street", 33), "987654321");
+		Client otherClient = new Client(this.bank, new IdCard("José Manuel", "023456786", "Street", 33), "987654322");
+		this.youngClient = new Client(this.bank, new IdCard("José Manuel", "023456785", "Street", 17), "987654323");
 
 		this.checking = (CheckingAccount) this.services
 				.getAccountByIban(this.bank.createAccount(Bank.AccountType.CHECKING, this.client, 0, 0));
@@ -53,7 +55,7 @@ public class ExamTests {
 				.getAccountByIban(this.bank.createAccount(Bank.AccountType.YOUNG, this.youngClient, 0, 0));
 
 		this.salary = (SalaryAccount) this.services
-				.getAccountByIban(this.bank.createAccount(Bank.AccountType.SALARY, this.client, 0, 1000));
+				.getAccountByIban(this.bank.createAccount(Bank.AccountType.SALARY, this.client, 0, 10000));
 	}
 
 	// OK 1.1 a
@@ -87,20 +89,6 @@ public class ExamTests {
 		} catch (AccountException e) {
 			assertFalse(this.checking.isInactive());
 			assertFalse(this.otherChecking.isInactive());
-		}
-	}
-
-	// OK 1.1 d
-	@Test
-	public void sumOfBalancesIsNegative() throws AccountException {
-		this.salary.withdraw(900);
-		try {
-			this.salary.inactive(this.checking);
-			fail();
-		} catch (AccountException e) {
-			assertFalse(this.salary.isInactive());
-			assertEquals(0, this.checking.getBalance());
-			assertEquals(-900, this.salary.getBalance());
 		}
 	}
 

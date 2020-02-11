@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import pt.ulisboa.tecnico.learnjava.bank.domain.Bank;
 import pt.ulisboa.tecnico.learnjava.bank.domain.Client;
+import pt.ulisboa.tecnico.learnjava.bank.domain.IdCard;
 import pt.ulisboa.tecnico.learnjava.bank.exceptions.BankException;
 import pt.ulisboa.tecnico.learnjava.bank.exceptions.ClientException;
 
@@ -30,7 +31,7 @@ public class ConstructorMethodTest {
 
 	@Test
 	public void success() throws ClientException {
-		Client client = new Client(this.bank, FIRST_NAME, LAST_NAME, NIF, PHONE_NUMBER, ADDRESS, AGE);
+		Client client = new Client(this.bank, new IdCard(FIRST_NAME + " " + LAST_NAME, NIF, ADDRESS, 33), PHONE_NUMBER);
 
 		assertEquals(this.bank, client.getBank());
 		assertEquals(FIRST_NAME, client.getFirstName());
@@ -43,23 +44,25 @@ public class ConstructorMethodTest {
 
 	@Test(expected = ClientException.class)
 	public void negativeAge() throws ClientException {
-		new Client(this.bank, FIRST_NAME, LAST_NAME, "12345678A", PHONE_NUMBER, ADDRESS, -1);
+		new Client(this.bank, new IdCard(FIRST_NAME + " " + LAST_NAME, NIF, ADDRESS, -1), PHONE_NUMBER);
 	}
 
 	@Test(expected = ClientException.class)
 	public void no9DigitsNif() throws ClientException {
-		new Client(this.bank, FIRST_NAME, LAST_NAME, "12345678A", PHONE_NUMBER, ADDRESS, AGE);
+		new Client(this.bank, new IdCard(FIRST_NAME + " " + LAST_NAME, "1234", ADDRESS, 33), PHONE_NUMBER);
 	}
 
 	@Test(expected = ClientException.class)
 	public void no9DigitsPhoneNumber() throws ClientException {
-		new Client(this.bank, FIRST_NAME, LAST_NAME, NIF, "A87654321", ADDRESS, AGE);
+		new Client(this.bank, new IdCard(FIRST_NAME + " " + LAST_NAME, NIF, ADDRESS, 33), "1234");
 	}
 
+	@Test
+
 	public void twoClientsSameNif() throws ClientException {
-		new Client(this.bank, FIRST_NAME, LAST_NAME, NIF, "A87654321", ADDRESS, AGE);
+		new Client(this.bank, new IdCard(FIRST_NAME + " " + LAST_NAME, NIF, ADDRESS, 33), PHONE_NUMBER);
 		try {
-			new Client(this.bank, FIRST_NAME, LAST_NAME, NIF, "A87654321", ADDRESS, AGE);
+			new Client(this.bank, new IdCard(FIRST_NAME + " " + LAST_NAME, NIF, ADDRESS, 33), PHONE_NUMBER);
 			fail();
 		} catch (ClientException e) {
 			assertEquals(1, this.bank.getTotalNumberOfClients());

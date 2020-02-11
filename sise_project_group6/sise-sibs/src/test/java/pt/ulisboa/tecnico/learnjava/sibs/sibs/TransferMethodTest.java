@@ -14,6 +14,7 @@ import org.junit.Test;
 import pt.ulisboa.tecnico.learnjava.bank.domain.Bank;
 import pt.ulisboa.tecnico.learnjava.bank.domain.CheckingAccount;
 import pt.ulisboa.tecnico.learnjava.bank.domain.Client;
+import pt.ulisboa.tecnico.learnjava.bank.domain.IdCard;
 import pt.ulisboa.tecnico.learnjava.bank.exceptions.AccountException;
 import pt.ulisboa.tecnico.learnjava.bank.exceptions.BankException;
 import pt.ulisboa.tecnico.learnjava.bank.exceptions.ClientException;
@@ -48,8 +49,10 @@ public class TransferMethodTest {
 		this.sibs = new Sibs(100, services);
 		this.sourceBank = new Bank("CGD");
 		this.targetBank = new Bank("BPI");
-		this.sourceClient = new Client(this.sourceBank, FIRST_NAME, LAST_NAME, NIF, PHONE_NUMBER, ADDRESS, 33);
-		this.targetClient = new Client(this.targetBank, FIRST_NAME, LAST_NAME, NIF, PHONE_NUMBER, ADDRESS, 22);
+		this.sourceClient = new Client(this.sourceBank,
+				new IdCard(FIRST_NAME + " " + LAST_NAME, "123456788", ADDRESS, 33), "914056607");
+		this.targetClient = new Client(this.targetBank, new IdCard(FIRST_NAME + " " + LAST_NAME, NIF, ADDRESS, 22),
+				PHONE_NUMBER);
 	}
 
 	@Test
@@ -72,8 +75,8 @@ public class TransferMethodTest {
 	@Test
 	public void successSameBank()
 			throws BankException, AccountException, SibsException, OperationException, ClientException {
-		Client targetSameBankClient = new Client(this.sourceBank, FIRST_NAME, LAST_NAME, "987654321", PHONE_NUMBER,
-				ADDRESS, 22);
+		Client targetSameBankClient = new Client(this.sourceBank, new IdCard(FIRST_NAME+" "+ LAST_NAME, "987654321",
+				ADDRESS, 22),"914056608");
 		String sourceIban = this.sourceBank.createAccount(Bank.AccountType.CHECKING, this.sourceClient, 1000, 0);
 		String targetIban = this.sourceBank.createAccount(Bank.AccountType.CHECKING, targetSameBankClient, 1000, 0);
 
