@@ -30,23 +30,8 @@ public class Client {
 		this.address = id.getAddress();
 		this.age = id.getAge();
 		bank.addClient(this);
-//		this(bank, id.getFullName()[0], id.getFullName()[1], id.getNif(), phoneNumber, id.getAddress(), id.getAge());
-	}
 
-//	public Client(Bank bank, String firstName, String lastName, String nif, String phoneNumber, String address, int age)
-//			throws ClientException {
-//		checkParameters(bank, nif, phoneNumber, age);
-//
-//		this.bank = bank;
-//		this.firstName = firstName;
-//		this.lastName = lastName;
-//		this.nif = nif;
-//		this.phoneNumber = phoneNumber;
-//		this.address = address;
-//		this.age = age;
-//
-//		bank.addClient(this);
-//	}
+	}
 
 	private void checkParameters(Bank bank, String nif, String phoneNumber, int age) throws ClientException {
 		if (age < 0) {

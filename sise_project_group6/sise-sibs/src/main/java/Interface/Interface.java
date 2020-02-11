@@ -7,10 +7,6 @@ import java.io.BufferedInputStream;
 import java.util.Random;
 import java.util.Scanner;
 
-import pt.ulisboa.tecnico.learnjava.bank.domain.Bank;
-import pt.ulisboa.tecnico.learnjava.bank.domain.Bank.AccountType;
-import pt.ulisboa.tecnico.learnjava.bank.domain.Client;
-import pt.ulisboa.tecnico.learnjava.bank.domain.IdCard;
 import pt.ulisboa.tecnico.learnjava.bank.exceptions.AccountException;
 import pt.ulisboa.tecnico.learnjava.bank.exceptions.BankException;
 import pt.ulisboa.tecnico.learnjava.bank.exceptions.ClientException;
@@ -26,14 +22,14 @@ public class Interface {
 			throws BankException, ClientException, AccountException, MbWayException, SibsException, OperationException {
 		Services service = new Services();
 		Sibs sibs = new Sibs(10000, service);
-		Bank bank1 = new Bank("CGD");
-		Bank bank2 = new Bank("CTT");
-		Client client1 = new Client(bank1, new IdCard("Dorian Grey", "123456789", "casa pia", 200), "914056607");
-		Client client2 = new Client(bank1, new IdCard("Luke Skywalker", "234567891", "Tatooine", 20), "917722338");
-		Client client3 = new Client(bank2, new IdCard("Tom Riddle", "345678912", "Hogwarts", 60), "666666666");
-		bank1.createAccount(AccountType.CHECKING, client1, 10000, 1000); // Iban CGDCK1
-		bank1.createAccount(AccountType.CHECKING, client2, 10000, 1000); // Iban CGDCK2
-		bank2.createAccount(AccountType.CHECKING, client3, 10000, 1000); // Iban CTTCK3
+//		Bank bank1 = new Bank("CGD");
+//		Bank bank2 = new Bank("CTT");
+//		Client client1 = new Client(bank1, new IdCard("Dorian Grey", "123456789", "casa pia", 200), "914056607");
+//		Client client2 = new Client(bank1, new IdCard("Luke Skywalker", "234567891", "Tatooine", 20), "917722338");
+//		Client client3 = new Client(bank2, new IdCard("Tom Riddle", "345678912", "Hogwarts", 60), "666666666");
+//		bank1.createAccount(AccountType.CHECKING, client1, 10000, 1000); // Iban CGDCK1
+//		bank1.createAccount(AccountType.CHECKING, client2, 10000, 1000); // Iban CGDCK2
+//		bank2.createAccount(AccountType.CHECKING, client3, 10000, 1000); // Iban CTTCK3
 		MbwayAccount mbway;
 		while (true) {
 			String str[] = lerInput();
@@ -118,6 +114,7 @@ public class Interface {
 		}
 	}
 
+	// Metodos criados para melhorar a primeira heuristica
 	public static void setCode(MbwayAccount mbway) {
 		Random rand = new Random();
 		Integer code = 1000000 + rand.nextInt(8999999);
